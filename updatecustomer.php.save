@@ -1,0 +1,28 @@
+<?php
+	include 'connectdb.php';
+	
+	$newcustomerID = $_POST["customerID"];
+	$newphoneNumber = $_POST["phoneNumber"];
+
+        //$customerexist = 'SELECT customerID FROM customer';
+        $customerexist = 'SELECT COUNT(*) AS check FROM customer WHERE customerID="'.$newcustomerID.'"';
+
+	echo $customerexist;
+	$customerResult = mysqli_query($connection, $customerexist);
+        $getcustomerTab = mysqli_fetch_assoc($customerResult);
+	echo $getcustomerTab['check'];
+	if ($getcustomerTab['check'] == 0){
+		die("non existant ID");
+	}
+
+	$update= 'UPDATE customer SET phoneNumber="'.$newphoneNumber.'" WHERE customerID="'.$newcustomerID.'";';
+	$result=mysqli_query($connection, $update);	
+	if (!$result) {
+		die ("Error did not update.");
+	} else {
+		echo "Customer Phone Number Updated!";
+		header('Location: list.php');
+	}
+
+	mysqli_close($connection);
+?>
